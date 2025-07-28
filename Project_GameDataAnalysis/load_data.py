@@ -1,21 +1,29 @@
 import pandas as pd
 import os
 
-def load_game_data(file_name="games_full.csv"):
+def load_game_data(file_name="games_full.csv", base_path=None):
     """
     Загружает данные из CSV-файла.
 
     Args:
         file_name (str): Имя CSV-файла с данными.
+        base_path (str, optional): Базовый путь проекта. Если None,
+                                   будет использована директория, где находится этот скрипт.
 
     Returns:
         pd.DataFrame: Загруженные данные в виде DataFrame, или None в случае ошибки.
     """
     # Определяем базовую директорию текущего скрипта
-    script_dir = os.path.dirname(__file__)
+    if base_path is None:
+        # Если base_path не указан (т.е. скрипт запускается напрямую),
+        # то базовая директория - это папка, где находится load_data.py
+        base_dir = os.path.dirname(__file__)
+    else:
+        # Если base_path указан
+        base_dir = base_path
     #  Project_GameDataAnalysis/data/
 
-    data_path = os.path.join(script_dir, "data", file_name)
+    data_path = os.path.join(base_dir, "data", file_name) # base_dir -> data -> file_name
 
     if not os.path.exists(data_path):
         print(f"Ошибка: Файл '{data_path}' не найден. Убедитесь, что он находится в папке 'data' внутри Project_GameDataAnalysis.")
@@ -38,3 +46,5 @@ if __name__ == "__main__":
         print(game_df.head())
         print("\nИнформация о столбцах:")
         game_df.info()
+
+
